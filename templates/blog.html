@@ -30,6 +30,15 @@
 				<div class="post">
 					<div> {{ post.post }} </div>
 				</div>
+				<div class="actions">
+					<form action="/remove_post" method="POST">
+						<div>
+							<input type="hidden" name="id" value={{ post._id }} />
+							<button type="submit">Remove</button>
+						</div>
+					</form>
+					
+				</div>
 		  	</div>
 		{% endfor %}
 	

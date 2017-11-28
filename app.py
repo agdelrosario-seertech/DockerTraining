@@ -34,6 +34,14 @@ def add_post():
     return redirect(url_for('landing_page'))
 
 
+
+@app.route('/remove_post', methods=['POST'])
+def remove_post():
+
+    remove()
+    return redirect(url_for('landing_page'))
+
+
 @app.route('/remove_all')
 def remove_all():
     db.blogpostDB.delete_many({})
@@ -62,15 +70,23 @@ def new():
     }
     db.blogpostDB.insert_one(item_doc)
 
-    _posts = db.blogpostDB.find()
-    posts = [post for post in _posts]
-
+    posts = get_posts()
     return JSONEncoder().encode(posts[-1])
 
 
 ### Insert function here ###
 
 
+def remove():
+    id = request.form['id']
+
+    db.blogpostDB.delete_one({'_id': ObjectId(id)})
+
+    return JSONEncoder().encode(get_posts())
+
+def get_posts():
+    _posts = db.blogpostDB.find()
+    return [post for post in _posts]
 
 ############################
 
