@@ -83,6 +83,74 @@
           }
         }
       }
+    },
+    "/update": {
+      "post": {
+        "tags": [
+          "blog post"
+        ],
+        "summary": "Update blog post",
+        "description": "",
+        "operationId": "updatePost",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Post object that needs to be updated to the Blog",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/blogupdateDB"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "[{'title':title,'post':post, _id:id}]"
+          }
+        }
+      }
+    },
+    "/remove": {
+      "post": {
+        "tags": [
+          "blog post"
+        ],
+        "summary": "Remove blog post",
+        "description": "",
+        "operationId": "removePost",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/xml",
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Post object that needs to be removed from the Blog",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/blogremoveDB"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "[{'title':title,'post':post, _id:id}]"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -105,6 +173,37 @@
       "xml": {
         "name": "Pet"
       }
-    }
+    },
+    "blogupdateDB": {
+      "type": "object",
+      "required": [
+        "_id"
+      ],
+      "properties": {
+        "_id": {
+          "type": "object",
+          "example": "ObjectId(\"5a1e46c9c56a13000b7cd8ef\")"
+        }
+      },
+      "xml": {
+        "name": "Blog"
+      }
+    },
+    "blogremoveDB": {
+      "type": "object",
+      "required": [
+        "_id"
+      ],
+      "properties": {
+        "_id": {
+          "type": "object",
+          "example": "ObjectId(\"5a1e46c9c56a13000b7cd8ef\")"
+        }
+      },
+      "xml": {
+        "name": "Blog"
+      }
+    },
+
   }
 }

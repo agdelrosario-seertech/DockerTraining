@@ -1,5 +1,5 @@
 from flask import Flask, redirect, url_for, \
-				  request, render_template, json
+                  request, render_template, json
 from pymongo import MongoClient
 import pymongo
 import os
@@ -91,7 +91,11 @@ def new():
 
 ### Insert function here ###
 
+def get_posts(query = {}):
+    _posts = db.blogpostDB.find(query)
+    return [post for post in _posts]
 
+@app.route('/remove', methods=['DELETE'])
 def remove():
     id = request.form['id']
 
@@ -99,10 +103,7 @@ def remove():
 
     return JSONEncoder().encode(get_posts())
 
-def get_posts(query = {}):
-    _posts = db.blogpostDB.find(query)
-    return [post for post in _posts]
-
+@app.route('/update', methods=['PATCH'])
 def update():
     id = request.form['id']
 
