@@ -30,7 +30,13 @@
 				<div class="post">
 					<div> {{ post.post }} </div>
 				</div>
-				<div class="actions">
+				<div class="actions description wrapper">
+					<form action="/update_post">
+						<div>
+							<input type="hidden" name="id" value={{ post._id }} />
+							<button type="submit">Update</button>
+						</div>
+					</form>
 					<form action="/remove_post" method="POST">
 						<div>
 							<input type="hidden" name="id" value={{ post._id }} />
