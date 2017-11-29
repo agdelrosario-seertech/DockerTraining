@@ -1,5 +1,5 @@
 from flask import Flask, redirect, url_for, \
-				  request, render_template, json
+                  request, render_template, json
 from pymongo import MongoClient
 import pymongo
 import os
@@ -26,12 +26,30 @@ def landing_page():
     
     return render_template('blog.html', posts=json.loads(posts))
 
-
 @app.route('/add_post', methods=['POST'])
 def add_post():
 
     new()
     return redirect(url_for('landing_page'))
+
+
+
+@app.route('/remove_post', methods=['POST'])
+def remove_post():
+
+    remove()
+    return redirect(url_for('landing_page'))
+
+
+@app.route('/update_post')
+def update_post():
+    print "update"
+    return render_template('edit_blog.html', post=json.loads(get_post()))
+
+
+@app.route('/get_post', methods=['GET'])
+def get_post():
+    return JSONEncoder().encode(get_posts({"_id": ObjectId(request.args["id"])}))
 
 
 @app.route('/remove_all')
@@ -41,16 +59,20 @@ def remove_all():
     return redirect(url_for('landing_page'))
 
 
+@app.route('/edit_post', methods=['POST'])
+def edit_post():
+
+    update()
+    return redirect(url_for('landing_page'))
+
 
 
 ## Services
 
 @app.route("/posts", methods=['GET'])
 def get_all_posts():
-    
-    _posts = db.blogpostDB.find()
-    posts = [post for post in _posts]
-    return JSONEncoder().encode(posts)
+
+    return JSONEncoder().encode(get_posts())
 
 
 @app.route('/new', methods=['POST'])
@@ -60,17 +82,39 @@ def new():
         'title': request.form['title'],
         'post': request.form['post']
     }
+
     db.blogpostDB.insert_one(item_doc)
 
-    _posts = db.blogpostDB.find()
-    posts = [post for post in _posts]
-
+    posts = get_posts()
     return JSONEncoder().encode(posts[-1])
 
 
 ### Insert function here ###
 
+def get_posts(query = {}):
+    _posts = db.blogpostDB.find(query)
+    return [post for post in _posts]
 
+@app.route('/remove', methods=['DELETE'])
+def remove():
+    id = request.form['id']
+
+    db.blogpostDB.delete_one({'_id': ObjectId(id)})
+
+    return JSONEncoder().encode(get_posts())
+
+@app.route('/update', methods=['PATCH'])
+def update():
+    id = request.form['id']
+
+    item_doc = {
+        'title': request.form['title'],
+        'post': request.form['post']
+    }
+
+    db.blogpostDB.update_one({"_id": ObjectId(id)}, { "$set": item_doc })
+
+    return JSONEncoder().encode(get_posts())
 
 ############################
 
